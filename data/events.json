@@ -1,0 +1,96 @@
+{
+  "as_of_date": "2026-10-27",
+  "events": [
+    {
+      "id": "epc-address-deadline-2026",
+      "publisher": "European Payments Council",
+      "jurisdiction": "SEPA",
+      "scheme": "EPC payment schemes",
+      "category": "deadline",
+      "published_on": "2026-09-10",
+      "effective_date": null,
+      "effective_period": null,
+      "status": "postponed",
+      "title": "EPC postpones the unstructured-address end date",
+      "summary": "The EPC removed the 15 November 2026 end date. A replacement date has not been set.",
+      "source_url": "https://www.europeanpaymentscouncil.eu/node/28486",
+      "verified_on": "2026-10-27"
+    },
+    {
+      "id": "swift-cbpr-address-extension-2026",
+      "publisher": "Swift",
+      "jurisdiction": "International",
+      "scheme": "CBPR+",
+      "category": "deadline",
+      "published_on": "2026-08-27",
+      "effective_date": null,
+      "effective_period": null,
+      "status": "postponed",
+      "title": "Swift defers the structured-address requirement",
+      "summary": "Swift deferred its November 2026 payments changes. It said it would consult on the structured-address timing and provide an update by December 2026 at the latest.",
+      "source_url": "https://www.swift.com/insights/news/swift-accepts-community-request-extend-structured-address-migration-iso-20022-payment-messages",
+      "verified_on": "2026-10-27"
+    },
+    {
+      "id": "swiss-payment-address-transition-2026",
+      "publisher": "SIX Group / Payments Committee Switzerland",
+      "jurisdiction": "Switzerland",
+      "scheme": "Swiss Payment Standards",
+      "category": "deadline",
+      "published_on": null,
+      "effective_date": "2026-11-14",
+      "effective_period": null,
+      "status": "scheduled",
+      "title": "Swiss Payments keeps the 14 November 2026 transition",
+      "summary": "SPS 2026 remains scheduled for 14 November 2026, including pain.001.001.09 and structured or hybrid address requirements. SIX says SIC address validation will be waived to avoid hindering payments routed to or from Swift.",
+      "source_url": "https://www.six-group.com/en/products-services/banking-services/payment-standardization/swiss-payments.html",
+      "verified_on": "2026-10-27"
+    },
+    {
+      "id": "fedwire-release-rescheduled-2027",
+      "publisher": "Federal Reserve Financial Services",
+      "jurisdiction": "United States",
+      "scheme": "Fedwire Funds Service",
+      "category": "release",
+      "published_on": "2026-08-27",
+      "effective_date": null,
+      "effective_period": "2027-11",
+      "status": "postponed",
+      "title": "Fedwire moves the November 2026 release to November 2027",
+      "summary": "The release moved to November 2027. The exact date is to be announced. Hybrid addresses are planned to be supported with that release.",
+      "source_url": "https://www.frbservices.org/resources/financial-services/wires/iso-20022-implementation-center/november-release-faq",
+      "verified_on": "2026-10-27"
+    },
+    {
+      "id": "chaps-rtgs-release-delay-2026",
+      "publisher": "Bank of England",
+      "jurisdiction": "United Kingdom",
+      "scheme": "CHAPS / RTGS",
+      "category": "release",
+      "published_on": "2026-08-27",
+      "effective_date": null,
+      "effective_period": null,
+      "status": "postponed",
+      "title": "Bank of England delays the November 2026 RTGS standards release",
+      "summary": "The Bank delayed the November 2026 release, including CHAPS messaging standards, to maintain alignment with Swift. The announcement did not give a replacement date.",
+      "source_url": "https://www.bankofengland.co.uk/news/2026/august/delay-to-the-november-2026-rtgs-standards-release",
+      "verified_on": "2026-10-27"
+    },
+    {
+      "id": "ebics-legacy-format-retirement-paused-2026",
+      "publisher": "Die Deutsche Kreditwirtschaft / EBICS",
+      "jurisdiction": "Germany",
+      "scheme": "EBICS payment formats",
+      "category": "format_retirement",
+      "published_on": "2026-09-24",
+      "effective_date": null,
+      "effective_period": null,
+      "status": "postponed",
+      "title": "German industry suspends the November 2026 retirement of legacy formats",
+      "summary": "The German Banking Industry Committee suspended the planned retirement of older SEPA, foreign-transfer, and euro-urgent-transfer formats. New end dates will follow Swift and EPC decisions.",
+      "source_url": "https://www.ebics.de/de/aktuelles",
+      "verified_on": "2026-10-27"
+    }
+  ]
+}
+
