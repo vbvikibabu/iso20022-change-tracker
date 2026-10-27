@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A source-linked timeline of ISO 20022 payment message changes and deadlines.">
+  <title>ISO 20022 Change Tracker</title>
+  <style>
+    :root { color-scheme: light; --ink:#18232c; --muted:#5e6b75; --line:#dce3e8; --paper:#f5f7f8; --blue:#075b83; --tag:#e6f1f6; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:980px; margin:0 auto; padding:44px 22px 72px; }
+    header { margin-bottom:28px; }
+    h1 { font-size:clamp(2rem,5vw,3.1rem); letter-spacing:-.04em; line-height:1.08; margin:0 0 12px; }
+    header p { color:var(--muted); max-width:680px; margin:0; }
+    .notice { border-left:4px solid var(--blue); background:white; padding:12px 16px; margin:22px 0; color:var(--muted); }
+    .filters { display:grid; grid-template-columns:1fr 1fr 2fr; gap:12px; margin:24px 0 12px; }
+    label { display:block; color:var(--muted); font-size:.85rem; font-weight:650; }
+    select,input { display:block; width:100%; margin-top:5px; padding:10px 11px; border:1px solid var(--line); border-radius:8px; background:white; color:var(--ink); font:inherit; }
+    #summary { color:var(--muted); font-size:.9rem; margin:14px 0; }
+    .event { background:white; border:1px solid var(--line); border-radius:12px; padding:20px; margin:14px 0; box-shadow:0 2px 8px #18232c08; }
+    .topline { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:10px; }
+    .tag { display:inline-block; background:var(--tag); color:#164660; border-radius:999px; padding:3px 9px; font-size:.78rem; font-weight:700; }
+    .date { color:var(--muted); font-size:.86rem; }
+    h2 { font-size:1.2rem; line-height:1.3; margin:0 0 8px; }
+    .event p { margin:8px 0; }
+    .meta { color:var(--muted); font-size:.88rem; }
+    a { color:var(--blue); text-underline-offset:3px; }
+    .empty,.error { background:white; border:1px solid var(--line); border-radius:10px; padding:18px; color:var(--muted); }
+    footer { color:var(--muted); font-size:.85rem; margin-top:30px; }
+    @media (max-width:650px) { main { padding:30px 16px 54px; } .filters { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>ISO 20022 Change Tracker</h1>
+    <p>A source-linked timeline of payment message changes, implementation dates, and scheme announcements.</p>
+  </header>
+  <div class="notice">Use the issuing scheme, clearing operator, or bank as the final source for operational decisions. A published date may apply differently by institution.</div>
+  <section class="filters" aria-label="Filter events">
+    <label>Scheme or region
+      <select id="scheme"><option value="">All schemes and regions</option></select>
+    </label>
+    <label>Status
+      <select id="status"><option value="">All statuses</option></select>
+    </label>
+    <label>Search
+      <input id="search" type="search" placeholder="Search publisher, title, or summary">
+    </label>
+  </section>
+  <p id="summary" aria-live="polite">Loading updates…</p>
+  <section id="events" aria-live="polite"></section>
+  <footer>Open data feed: <a href="data/events.json">events.json</a> · <a href="schema/events.schema.json">JSON schema</a></footer>
+</main>
+<script>
+(async () => {
+  const host = document.querySelector("#events");
+  const summary = document.querySelector("#summary");
+  const scheme = document.querySelector("#scheme");
+  const status = document.querySelector("#status");
+  const search = document.querySelector("#search");
+  try {
+    const response = await fetch("data/events.json");
+    if (!response.ok) throw new Error("Could not load the event feed.");
+    const feed = await response.json();
+    const events = [...feed.events].sort((a,b) => (b.published_on || "").localeCompare(a.published_on || ""));
+    for (const value of [...new Set(events.map(e => e.scheme))].sort()) scheme.add(new Option(value, value));
+    for (const value of [...new Set(events.map(e => e.status))].sort()) status.add(new Option(value.replaceAll("_"," "), value));
+    const render = () => {
+      const q = search.value.trim().toLowerCase();
+      const visible = events.filter(e =>
+        (!scheme.value || e.scheme === scheme.value) &&
+        (!status.value || e.status === status.value) &&
+        (!q || [e.publisher,e.title,e.summary,e.jurisdiction,e.scheme].join(" ").toLowerCase().includes(q))
+      );
+      summary.textContent = visible.length + " update" + (visible.length === 1 ? "" : "s") + " · feed checked " + feed.as_of_date;
+      host.replaceChildren();
+      if (!visible.length) {
+        const empty = document.createElement("p");
+        empty.className = "empty";
+        empty.textContent = "No updates match those filters.";
+        host.append(empty);
+        return;
+      }
+      for (const e of visible) {
+        const card = document.createElement("article");
+        card.className = "event";
+        const top = document.createElement("div"); top.className = "topline";
+        for (const value of [e.status.replaceAll("_"," "), e.scheme]) {
+          const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = value; top.append(tag);
+        }
+        const date = document.createElement("span"); date.className = "date"; date.textContent = e.published_on ? "Published " + e.published_on : "Publication date not stated"; top.append(date);
+        const title = document.createElement("h2"); title.textContent = e.title;
+        const body = document.createElement("p"); body.textContent = e.summary;
+        const meta = document.createElement("p"); meta.className = "meta";
+        const timing = e.effective_date || e.effective_period || "No new date published";
+        meta.textContent = e.publisher + " · " + e.jurisdiction + " · Timing: " + timing + " · Verified " + e.verified_on + " · ";
+        const link = document.createElement("a"); link.href = e.source_url; link.textContent = "Primary source"; link.target = "_blank"; link.rel = "noopener noreferrer";
+        meta.append(link);
+        card.append(top,title,body,meta); host.append(card);
+      }
+    };
+    scheme.addEventListener("change", render);
+    status.addEventListener("change", render);
+    search.addEventListener("input", render);
+    render();
+  } catch (error) {
+    summary.textContent = "";
+    const message = document.createElement("p"); message.className = "error"; message.textContent = error.message;
+    host.append(message);
+  }
+})();
+</script>
+</body>
+</html>
+
+
