@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ISO 20022 Change Tracker feed",
+  "type": "object",
+  "required": [
+    "as_of_date",
+    "events"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "as_of_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "publisher",
+          "jurisdiction",
+          "scheme",
+          "category",
+          "published_on",
+          "effective_date",
+          "effective_period",
+          "status",
+          "title",
+          "summary",
+          "source_url",
+          "verified_on"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "publisher": {
+            "type": "string",
+            "minLength": 1
+          },
+          "jurisdiction": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scheme": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "deadline",
+              "message_version",
+              "release",
+              "format_retirement",
+              "guidance",
+              "other"
+            ]
+          },
+          "published_on": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "effective_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "effective_period": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+          },
+          "status": {
+            "enum": [
+              "scheduled",
+              "postponed",
+              "effective",
+              "withdrawn",
+              "under_review",
+              "informational"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "verified_on": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    }
+  }
+}
+
